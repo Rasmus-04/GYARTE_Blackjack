@@ -1,33 +1,29 @@
-import random
-deck = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]*4
-random.shuffle(deck)
-players = []
-money = []
-activeBet = []
-run = True
-round = 0
+from config import *
 amountOfPlayers = 2#input("Enter amount of players(Max 4): ")
 
 for i in range(int(amountOfPlayers)):
-    players.append([])
-    money.append(1000)
-    activeBet.append(0)
-players.append([])
+    players.append(PLAYER())
+players.append(PLAYER(dealer=True))
 
 def giveCards():
-    for j in range(len(players)):
-        players[j].append(deck[-1])
-        deck.insert(0, deck[-1])
-        deck.pop(-1)
+    for i in range(2):
+        for j in players:
+            j.drawCard()
+
+giveCards()
+for i in players:
+    if i.dealer:
+        print(i.cards, "Dealer")
+        continue
+    print(i.cards)
 
 while run:
     round += 1
     print(f"Runda {round}")
     # Fråga spelarna hur mycket dom vill beta
-    for i in range(len(players)):
-        input("Hur mycket vill spelare "+ str(i+1) +" betta? ")
+    for i in range(len(players)-1):
+        input("Hur mycket vill spelare " + str(i+1) + " betta? ")
     break
 
 
 
-print(players, money, activeBet)
