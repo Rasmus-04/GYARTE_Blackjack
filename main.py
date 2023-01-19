@@ -1,5 +1,5 @@
 from config import *
-amountOfPlayers = 2#input("Enter amount of players(Max 4): ")
+amountOfPlayers = 1#input("Enter amount of players(Max 4): ")
 
 for i in range(int(amountOfPlayers)):
     players.append(PLAYER())
@@ -9,21 +9,27 @@ def giveCards():
     for i in range(2):
         for j in players:
             j.drawCard()
-
 giveCards()
-for i in players:
-    if i.dealer:
-        print(i.cards, "Dealer")
-        continue
-    print(i.cards)
+
+def showCards():
+    print()
+    for index, i in enumerate(players[:-1]):
+        print(f"P{index+1} cards: {i.cards}")
+    print(f"Dealers cards: [{players[-1].cards[0]}, #]")
+    print()
+
 
 while run:
     round += 1
     print(f"Runda {round}")
     # Fråga spelarna hur mycket dom vill beta
-    for i in range(len(players)-1):
-        input("Hur mycket vill spelare " + str(i+1) + " betta? ")
+    for index, i in enumerate(players[:-1]):
+        i.bet(int(input("Hur mycket vill spelare " + str(index+1) + " betta? ")))
+    showCards()
+
+    for index, i in enumerate(players[:-1]):
+        print(f"p{index+1}: ", end="")
+        i.showPlayOptions()
+        input()
+
     break
-
-
-

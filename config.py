@@ -1,5 +1,5 @@
 from classes import *
 deck.shuffleCards()
-run = False
+run = True
 round = 0
 players = []
