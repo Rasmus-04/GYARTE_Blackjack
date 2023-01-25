@@ -21,6 +21,7 @@ class PLAYER:
         self.dealer = dealer
         self.activeBet = 0
         self.cards = []
+        self.stand = False
 
     def drawCard(self):
         self.cards.append(deck.drawCard())
@@ -31,11 +32,11 @@ class PLAYER:
 
     def showPlayOptions(self):
         if len(self.cards) == 2 and self.canSplit():
-            print("Do you wanna h(hit), h(hold), d(double down), f(fold), s(split)? ")
+            print("Do you wanna 1(hit), 2(stand), 3(double down), 4(fold), 5(split)? ")
         elif(len(self.cards) == 2):
-            print("Do you wanna h(hit), h(hold), d(double down), f(fold)? ")
+            print("Do you wanna 1(hit), 2(stand), 3(double down), 4(fold)? ")
         else:
-            print("Do you wanna h(hit), h(hold)? ")
+            print("Do you wanna 1(hit), 2(stand)? ")
 
     def canSplit(self):
         if len(self.cards) != 2:
