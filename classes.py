@@ -3,7 +3,7 @@ import random
 class DECK:
     def __init__(self, decks=1):
         self.decks = decks
-        self.cards = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]*4*self.decks
+        self.cards = ([2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]*4)*self.decks
 
     def shuffleCards(self):
         random.shuffle(self.cards)
@@ -32,11 +32,11 @@ class PLAYER:
 
     def showPlayOptions(self):
         if len(self.cards) == 2 and self.canSplit():
-            print("Do you wanna 1(hit), 2(stand), 3(double down), 4(fold), 5(split)? ")
+            print("Do you wanna 1(hit), 2(stand), 3(double down), 4(fold), 5(split), 0(Avbryt)? ")
         elif(len(self.cards) == 2):
-            print("Do you wanna 1(hit), 2(stand), 3(double down), 4(fold)? ")
+            print("Do you wanna 1(hit), 2(stand), 3(double down), 4(fold), 0(Avbryt)? ")
         else:
-            print("Do you wanna 1(hit), 2(stand)? ")
+            print("Do you wanna 1(hit), 2(stand), 0(Avbryt)? ")
 
     def canSplit(self):
         if len(self.cards) != 2:
@@ -48,7 +48,7 @@ class PLAYER:
             if i in change:
                 temp[index] = 10
 
-        if temp[0] == temp[1]:
+        if temp[0] == temp[1] and self.money >= self.activeBet:
             return True
         return False
 
@@ -70,3 +70,8 @@ class PLAYER:
                 tempCount += i
 
         return tempCount
+
+    def canDoubleDown(self):
+        if len(self.cards) == 2 and self.money >= self.activeBet:
+            return True
+        return False
