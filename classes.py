@@ -24,7 +24,10 @@ class PLAYER:
         self.dealer = dealer
         self.activeBet = 0
         self.cards = []
+        self.splitCards = []
         self.stand = False
+        self.isSplit = False
+
 
     # Drar ett kort
     def drawCard(self):
@@ -63,8 +66,12 @@ class PLAYER:
         return False
 
     # Räknar ut värdet på sina kort
-    def calculateHand(self):
-        temp = self.cards.copy()
+    def calculateHand(self, splitHand=False):
+        if splitHand:
+            temp = self.splitCards.copy()
+        else:
+            temp = self.cards.copy()
+
         change = ["J", "Q", "K"]
         for index, i in enumerate(temp):
             if i in change:
@@ -90,3 +97,11 @@ class PLAYER:
         if len(self.cards) == 2 and self.money >= self.activeBet:
             return True
         return False
+
+    # Resetar för en ny runda
+    def reset(self):
+        self.activeBet = 0
+        self.cards = []
+        self.splitCards = []
+        self.stand = False
+        self.isSplit = False

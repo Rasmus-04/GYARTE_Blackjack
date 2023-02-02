@@ -37,9 +37,7 @@ def showMoney():
 # Resetar spelaren efter varjee runda
 def resetPlayersBet():
     for player in players:
-        player.cards = []
-        player.activeBet = 0
-        player.stand = False
+        player.reset()
 
 # Ränknar ut hur många kort dealern borde plocka upp
 def calculateDealerHand():
