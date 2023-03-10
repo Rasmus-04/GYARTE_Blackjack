@@ -19,14 +19,14 @@ deck = DECK()
 
 
 class PLAYER:
-    def __init__(self, money=1000, dealer=False):
+    def __init__(self, money=1000):
         self.money = money
-        self.dealer = dealer
         self.activeBet = 0
         self.cards = []
         self.splitCards = []
         self.stand = False
         self.isSplit = False
+        self.splitStand = False
 
 
     # Drar ett kort
@@ -52,7 +52,7 @@ class PLAYER:
 
     # Kollar om spelaren kan splita korten
     def canSplit(self):
-        if len(self.cards) != 2:
+        if len(self.cards) != 2 or self.isSplit:
             return False
 
         temp = self.cards.copy()
@@ -105,3 +105,47 @@ class PLAYER:
         self.splitCards = []
         self.stand = False
         self.isSplit = False
+        self.splitStand = False
+
+    def play(self, playerNr):
+        while not self.stand and self.calculateHand() < 21:
+            print(f"p{playerNr}: ", end="")
+            self.showPlayOptions()
+            inp = input().strip()[0]
+            if inp == "1":
+                self.drawCard()
+                print(f"p{playerNr}: {self.cards} ({self.calculateHand()})")
+            elif inp == "2":
+                self.stand = True
+            elif inp == "3" and self.canDoubleDown():
+                self.bet(self.activeBet)
+                self.drawCard()
+                self.stand = True
+            elif inp == "4":
+                self.money += int(self.activeBet / 2)
+                self.activeBet = 0
+                self.stand = True
+            elif inp == "5":
+                if self.canSplit():
+                    self.isSplit = True
+            elif inp == "0":
+                return True
+
+    def addWinnings(self, dealerHandValue):
+        handValue = self.calculateHand()
+
+        if handValue > 21:
+            return
+        elif handValue > dealerHandValue:
+            self.money += self.activeBet*2
+        elif handValue == dealerHandValue:
+            self.money += self.activeBet
+
+class DEALER(PLAYER):
+    def drawFinalHand(self, heigestHand):
+        while True:
+            if self.calculateHand() >= heigestHand:
+                return
+            elif self.calculateHand() > 16:
+                return
+            self.drawCard()

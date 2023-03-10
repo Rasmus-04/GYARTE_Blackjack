@@ -8,7 +8,7 @@ for i in range(int(amountOfPlayers)):
     players.append(PLAYER())
 
 # Skapar dealern och sätter den sist i spelar listan
-players.append(PLAYER(dealer=True))
+players.append(DEALER())
 dealer = players[-1]
 
 # Ger alla spelare och dealern sina kort av början av en runda
@@ -46,30 +46,15 @@ def calculateDealerHand():
         hand = player.calculateHand()
         if hand < 22 and hand > heigestHand:
             heigestHand = hand
-
-    while True:
-        if dealer.calculateHand() >= heigestHand:
-            return
-        elif dealer.calculateHand() > 16:
-            return
-        dealer.drawCard()
+    dealer.drawFinalHand(heigestHand)
 
 # Delar ut alla winnings till spelarna
 def giveWinnings():
     for player in players:
-        handValue = player.calculateHand()
         dealerHandValue = dealer.calculateHand()
-
         if dealerHandValue > 21:
             dealerHandValue = 0
-
-        if handValue > 21:
-            return
-        elif handValue > dealerHandValue:
-            player.money += player.activeBet*2
-        elif handValue == dealerHandValue:
-            player.money += player.activeBet
-
+        player.addWinnings(dealerHandValue)
 
 while run:
     round += 1
@@ -79,7 +64,6 @@ while run:
     for index, player in enumerate(players[:-1]):
         while not player.bet(int(input("Hur mycket vill spelare " + str(index+1) + " betta? "))):
             pass
-
     giveCards()
 
     # Kollar om dealern vann
@@ -91,32 +75,10 @@ while run:
         # Vissar alla kort
         showCards()
         # Går igenom varje spelare och kollar vad dom vill göra
-        for index, player in enumerate(players[:-1]):
-            while not player.stand and player.calculateHand() < 21:
-                print(f"p{index+1}: ", end="")
-                player.showPlayOptions()
-                inp = input().strip()[0]
-                if inp == "1":
-                    player.drawCard()
-                    print(f"p{index+1}: {player.cards} ({player.calculateHand()})")
-                elif inp == "2":
-                    player.stand = True
-                elif inp == "3" and player.canDoubleDown():
-                    player.bet(player.activeBet)
-                    player.drawCard()
-                    player.stand = True
-                elif inp == "4":
-                    player.money += int(player.activeBet/2)
-                    player.activeBet = 0
-                    player.stand = True
-                elif inp == "5":
-                    pass
-                elif inp == "0":
-                    run = False
-                    break
-
+        for index, player in enumerate(players[:-1], start=1):
+            if player.play(index):
+                run = False
         calculateDealerHand()
         giveWinnings()
         showCards(True)
-
     resetPlayersBet()
