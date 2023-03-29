@@ -5,17 +5,25 @@ class DECK:
     def __init__(self, decks=1):
         self.decks = decks
         self.cards = ([2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"]*4)*self.decks
+        self.lastShuffle = 0
 
     # Blandar korten
     def shuffleCards(self):
         random.shuffle(self.cards)
+        self.lastShuffle = 0
 
     # Tar det senaste kortet och lägger det längs bak i kortleken och returnar det kortert
     def drawCard(self):
+        self.lastShuffle += 1
         self.cards.insert(0, self.cards[-1])
         self.cards.pop(-1)
         return self.cards[0]
-deck = DECK()
+
+    # Kollar om man ska shuffla
+    def shouldShuffle(self, percent=0.15):
+        if self.lastShuffle > len(self.cards)*percent:
+            self.shuffleCards()
+deck = DECK(6)
 
 
 class PLAYER:
@@ -66,11 +74,14 @@ class PLAYER:
         return False
 
     # Räknar ut värdet på sina kort
-    def calculateHand(self, splitHand=False):
-        if splitHand:
+    def calculateHand(self, splitHand=False, hand=None):
+        if hand != None:
+            temp = hand
+        elif splitHand:
             temp = self.splitCards.copy()
         else:
             temp = self.cards.copy()
+
 
         change = ["J", "Q", "K"]
         for index, i in enumerate(temp):
