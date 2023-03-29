@@ -3,10 +3,9 @@ from main import *
 def hitOrStand(playerValue, dealerValue):
     ### Hit = True
     ### Stand = False
-
     if playerValue < 18:
         return True
-    elif playerValue == 18 and dealerValue != 4 and dealerValue != 7 and dealerValue != 8:
+    elif playerValue == 18 and dealerValue != 6 and dealerValue != 7 and dealerValue != 8:
         return True
     return False
 
@@ -19,7 +18,7 @@ def winOrLose(playerValue, dealerValue):
 
 wins = 0
 losses = 0
-nrOfRounds = 1_000_00
+nrOfRounds = 1_000_000
 
 bot = PLAYER()
 dealer = DEALER()
@@ -45,5 +44,5 @@ for rounds in range(1,nrOfRounds+1):
     else:
         losses += 1
 
-    if rounds % 1000 == 0:
+    if rounds % 10_000 == 0:
         print(rounds , wins/(wins+losses))
