@@ -27,7 +27,7 @@ players.append(dealer)
 
 giveCards()
 
-for rounds in range(1,nrOfRounds+1):
+for rounds in range(1, nrOfRounds+1):
     reset()
     giveCards()
 
@@ -35,7 +35,7 @@ for rounds in range(1,nrOfRounds+1):
         if hitOrStand(bot.calculateHand(), dealer.calculateHand(hand=[dealer.cards[0]])):
             bot.drawCard()
         else:
-            break;
+            break
 
     dealer.drawFinalHand(bot.calculateHand())
 
@@ -44,5 +44,5 @@ for rounds in range(1,nrOfRounds+1):
     else:
         losses += 1
 
-    if rounds % 10_000 == 0:
-        print(rounds , wins/(wins+losses))
+    if rounds % 100_000 == 0:
+        print(rounds, wins/(wins+losses))
